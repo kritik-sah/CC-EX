@@ -14,6 +14,7 @@ import {
   Flex,
   Input,
   useClipboard,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -38,6 +39,8 @@ import {
 import { FaCopy, FaRegCopy } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
+import Navigation from './Navbar/Navigation';
+import DropMenu from './Navbar/DropMenu';
 
 const Layout = function ({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,40 +60,16 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
       <HStack
         paddingX="8"
         paddingY="4"
-        backgroundColor={"cyan.700"}
         display="flex"
         justifyContent="space-between"
       >
-        <Heading color={"white"}>Carbon Credit</Heading>
-        {!isSSR && isConnected ? (
+        <Heading color={"teal.500"} as='h2' size='lg'>Carbon Credit</Heading>
+        <HStack display="flex"
+        justifyContent="end">
+          {!isSSR && isConnected ? (
           <>
-            <Menu>
-              <MenuButton>
-                <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
-              </MenuButton>
-              <Portal>
-                <MenuList>
-                  <MenuItem>
-                    <Flex
-                      mb={2}
-                      align="center"
-                      justify="space-between"
-                      w="full"
-                    >
-                      <Text>
-                        {address?.toString().slice(0, -36)}...
-                        {address?.toString().substring(38)}
-                      </Text>
-                      <Button onClick={onCopy} ml={2}>
-                        {hasCopied ? <FaCopy /> : <FaRegCopy />}
-                      </Button>
-                    </Flex>
-                  </MenuItem>
-
-                  <MenuItem onClick={() => disconnect()}>Logout</MenuItem>
-                </MenuList>
-              </Portal>
-            </Menu>
+          <DropMenu/>
+            
           </>
         ) : (
           <>
@@ -105,13 +84,13 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
                     Connect your wallet
                   </Text>
                   <div>
+                    <VStack
+                      divider={<StackDivider borderColor="gray.200" />}
+                      spacing={4}
+                      align="stretch"
+                    >
                     {connectors.map((connector) => (
                       <>
-                        <VStack
-                          divider={<StackDivider borderColor="gray.200" />}
-                          spacing={4}
-                          align="stretch"
-                        >
                           <Button
                             disabled={!connector.ready}
                             key={connector.id}
@@ -122,21 +101,21 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
                             {connector.name}
                             {isLoading &&
                               connector.id === pendingConnector?.id &&
-                              " (connecting)"}
+                              <Spinner />}
                           </Button>
-                        </VStack>
                         {/* {error && (
-                              <div>
-                              {toast({
-                                title: error.message,
-                                status: "error",
-                                isClosable: true,
-                              })}
-                              </div>
-                            
-                          )} */}
+                          <div>
+                          {toast({
+                            title: error.message,
+                            status: "error",
+                            isClosable: true,
+                          })}
+                          </div>
+                          
+                        )} */}
                       </>
                     ))}
+                    </VStack>
                   </div>
                 </ModalBody>
 
@@ -149,6 +128,11 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
             </Modal>
           </>
         )}
+
+        <Navigation/>
+
+        </HStack>
+        
       </HStack>
       {children}
       <HStack

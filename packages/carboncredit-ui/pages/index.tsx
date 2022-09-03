@@ -1,12 +1,12 @@
 import { Center, Link, Heading, Text, Divider, VStack } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import HeroHeader from '../components/header/HeroHeader'
 const Home: NextPage = () => {
+
   return (
-    <Center h="calc(100vh - 131px)">
-      <VStack>
-        <Heading textShadow="2px 2px #0987A0">Carbon-credit</Heading>
-      </VStack>
-    </Center>
+    <>
+      <HeroHeader/>
+    </>
   );
 };
 
