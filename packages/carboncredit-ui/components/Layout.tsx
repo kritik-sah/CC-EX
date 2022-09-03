@@ -4,16 +4,11 @@ import {
   HStack,
   Heading,
   Text,
-  Link,
+
   useDisclosure,
   VStack,
   StackDivider,
-  useToast,
-  Portal,
-  Avatar,
-  Flex,
-  Input,
-  useClipboard,
+
   Spinner,
 } from "@chakra-ui/react";
 import {
@@ -25,32 +20,27 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-} from "@chakra-ui/react";
 
-import { FaCopy, FaRegCopy } from "react-icons/fa";
+
+import { } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import Navigation from './Navbar/Navigation';
+import Footer from './Footer';
 import DropMenu from './Navbar/DropMenu';
+import Toasts from './toasts/Toasts';
 
 const Layout = function ({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+
   const { address, isConnected, connector } = useAccount();
-  const { hasCopied, onCopy } = useClipboard(address ?? "");
+
   const [isSSR, setIsSSR] = useState(true);
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
-  const { disconnect } = useDisconnect();
+
+
+ 
 
   useEffect(() => {
     setIsSSR(false);
@@ -63,7 +53,7 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
         display="flex"
         justifyContent="space-between"
       >
-        <Heading color={"teal.500"} as='h2' size='lg'>Carbon Credit</Heading>
+        <Heading color={"teal.500"} as='h2' size='lg'>CC-EX</Heading>
         <HStack display="flex"
         justifyContent="end">
           {!isSSR && isConnected ? (
@@ -90,10 +80,10 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
                       align="stretch"
                     >
                     {connectors.map((connector) => (
-                      <>
+                      <div key={connector.id}>
+                            
                           <Button
                             disabled={!connector.ready}
-                            key={connector.id}
                             onClick={() => connect({ connector })}
                             colorScheme="teal"
                             variant="ghost"
@@ -103,19 +93,11 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
                               connector.id === pendingConnector?.id &&
                               <Spinner />}
                           </Button>
-                        {/* {error && (
-                          <div>
-                          {toast({
-                            title: error.message,
-                            status: "error",
-                            isClosable: true,
-                          })}
-                          </div>
-                          
-                        )} */}
-                      </>
+                        
+                      </div>
                     ))}
                     </VStack>
+                    {error && <Toasts message={error.message}  status='error'/>}
                   </div>
                 </ModalBody>
 
@@ -135,15 +117,9 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
         
       </HStack>
       {children}
-      <HStack
-        paddingX="8"
-        paddingY="4"
-        backgroundColor={"cyan.700"}
-        display="flex"
-        justifyContent="center"
-      >
-        <Text color={"white"}>Footer</Text>
-      </HStack>
+      
+
+      <Footer/>
     </Box>
   );
 };
