@@ -39,14 +39,11 @@ import { FaCopy, FaRegCopy } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
-
-
 const Layout = function ({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const { address, isConnected, connector } = useAccount();
-
-  const { hasCopied, onCopy } = useClipboard(address);
+  const { hasCopied, onCopy } = useClipboard(address ?? "");
   const [isSSR, setIsSSR] = useState(true);
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
@@ -97,13 +94,7 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
           </>
         ) : (
           <>
-            
-            <Button
-              onClick={onOpen}
-              
-            >
-              Connect
-            </Button>
+            <Button onClick={onOpen}>Connect</Button>
             <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
@@ -133,8 +124,6 @@ const Layout = function ({ children }: { children: React.ReactNode }) {
                               connector.id === pendingConnector?.id &&
                               " (connecting)"}
                           </Button>
-                          
-                          
                         </VStack>
                         {/* {error && (
                               <div>
