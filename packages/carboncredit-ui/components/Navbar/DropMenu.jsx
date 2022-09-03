@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { FaCopy, FaRegCopy } from "react-icons/fa";
+import Toasts from '../toasts/Toasts';
 
 const DropMenu = () => {
   const { address, isConnected, connector } = useAccount();
@@ -38,9 +39,9 @@ const DropMenu = () => {
                   {address?.toString().slice(0, -36)}...
                   {address?.toString().substring(38)}
                 </Text>
-                <Button onClick={onCopy} ml={2}>
-                  {hasCopied ? <FaCopy /> : <FaRegCopy />}
-                </Button>
+                <div onClick={onCopy}>
+                  {hasCopied ? (<><FaCopy /> <Toasts message="Copied"  status='success'/></>) : <FaRegCopy />}
+                </div>
               </Flex>
             </MenuItem>
 
