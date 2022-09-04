@@ -23,7 +23,7 @@ import Toasts from '../toasts/Toasts';
 const DropMenu = () => {
   const { address, isConnected, connector } = useAccount();
   const { hasCopied, onCopy } = useClipboard(address ?? "");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { disconnect } = useDisconnect();
   return (
     <>
